@@ -1,0 +1,11 @@
+com\charlie\ExampleMain.class
+com\charlie\controllers\ControllerSource1.class
+com\charlie\beans\Track.class
+com\charlie\services\NumbersClassifier.class
+com\charlie\controllers\ControllerSource2.class
+com\charlie\services\BasicIntegrationConfig.class
+com\charlie\controllers\ControllerSource3.class
+com\charlie\beans\Tracks.class
+com\charlie\controllers\ControllerSync.class
+com\charlie\services\BasicIntegrationConfig$1.class
+com\charlie\services\MyService.class
