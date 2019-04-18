@@ -11,7 +11,7 @@ import com.charlie.beans.Track;
 public interface NumbersClassifier {
 
 	@Gateway(requestChannel = "multipleOfThreeFlow.input")
-	void multipleOfThree(List<Track> tracks);
+	void multipleOfThree(Track track);
 
 	@Gateway(requestChannel = "remainderIsOneFlow.input")
 	void remainderIsOne(List<Track> tracks);
@@ -21,5 +21,6 @@ public interface NumbersClassifier {
 
 	@Gateway(requestChannel = "remainderIsThreeFlow.input")
 	void remainderIsThree(List<Track> tracks);
+
 
 }	

@@ -55,7 +55,7 @@ public class BasicIntegrationConfig {
 	}
 
 	boolean isMultipleOfThree(Track track) {
-		return "0".equals(track.getDest());
+		return "1".equals(track.getDest())||"2".equals(track.getDest())||"3".equals(track.getDest());
 	}
 
 	boolean isRemainderOne(Track track) {
@@ -73,29 +73,43 @@ public class BasicIntegrationConfig {
 	public IntegrationFlow multipleOfThreeFlow() {
 	    return flow -> flow.split()
 	      .<Track> filter(this::isMultipleOfThree)
-	      .channel("multipleOfThreeChannel");
+	      .channel("multipleOfThreeChannel").gateway(classify((this.tracks.getTracks() != null && this.tracks.getTracks().size() > 0)?this.tracks.getTracks().get(0):null));
 	}
 	@Bean
-	public IntegrationFlow classify() {
+	public IntegrationFlow classify(Track track) {
 		return flow -> flow.split()
-				.<Integer, Integer> route(number -> number, 
+				.<Track,String> route(m -> m.getDest(),
 						mapping -> mapping
-						.channelMapping(0, "multipleofThreeChannel")
-						.subFlowMapping(1, subflow -> subflow
+						.subFlowMapping("1", subflow -> subflow
 								.<Track> handle((payload, headers) -> {
+									if (tracks1.getTracks() == null) {
+										List<Track> ts = new ArrayList<Track>();
+										tracks1.setTracks(ts);
+									}
 									tracks1.getTracks().add(payload);
+									tracks.getTracks().remove(0);
 									System.out.println("payload: "+payload);
 									return payload;
 								}).channel("remainderIsOneChannel"))
-						.subFlowMapping(2, subflow -> subflow
+						.subFlowMapping("2", subflow -> subflow
 								.<Track> handle((payload, headers) -> {
+									if (tracks2.getTracks() == null) {
+										List<Track> ts = new ArrayList<Track>();
+										tracks2.setTracks(ts);
+									}
 									tracks2.getTracks().add(payload);
+									tracks.getTracks().remove(0);
 									return payload;
 								})
 								.channel("remainderIsTwoChannel"))
-						.subFlowMapping(3, subflow -> subflow
+						.subFlowMapping("3", subflow -> subflow
 								.<Track> handle((payload, headers) -> {
+									if (tracks3.getTracks() == null) {
+										List<Track> ts = new ArrayList<Track>();
+										tracks3.setTracks(ts);
+									}
 									tracks3.getTracks().add(payload);
+									tracks.getTracks().remove(0);
 									return payload;
 								}).channel("remainderIsThreeChannel")));
 	}
@@ -138,20 +152,20 @@ public class BasicIntegrationConfig {
 
 	@Bean
 	@InboundChannelAdapter(value = "multipleofThreeChannel", poller = @Poller(fixedDelay = "1000"))
-	public MessageSource<Tracks> fileReadingMessageSource() {
-		MessageSource<Tracks> trks = new MessageSource<Tracks>(){
+	public MessageSource<Track> fileReadingMessageSource() {
+		MessageSource<Track> trk = new MessageSource<Track>(){
 
 			@Override
-			public Message<Tracks> receive() {
-				// TODO Auto-generated method stub
-				return new GenericMessage<Tracks>(getTracks());
+			public Message<Track> receive() {
+				if (tracks.getTracks() == null || tracks.getTracks().size() == 0) return new GenericMessage<Track>(new Track());
+				return new GenericMessage<Track>(tracks.getTracks().get(0));
 			}
 		};
 
-		return trks;
+		return trk;
 	}
 
-	synchronized public Tracks getTracks() {
+	public Tracks getTracks() {
 		List<Track> tracks = new ArrayList<Track>();
 		if (this.tracks.getTracks()!= null)
 			for (Track track: this.tracks.getTracks()){
@@ -162,16 +176,21 @@ public class BasicIntegrationConfig {
 			}
 		Tracks result = new Tracks();
 		result.setTracks(tracks);
-		this.tracks.setTracks(new ArrayList<Track>());
+		System.out.println("in getTracks() tracks:"+result.toString());
 		return result;
 	}
 
 	public void setTracks(Tracks tracks) {
 		this.tracks = tracks;
 	}	
-	synchronized public void setTrack(Track track) {
+	public void setTrack(Track track) {
 		System.out.println("Post track:"+track.toString());
+		if(this.tracks.getTracks() == null) {
+			List<Track> tracks = new ArrayList<Track>();
+			this.tracks.setTracks(tracks);
+		}
 		this.tracks.getTracks().add(track);
-		numbersClassifier.multipleOfThree(this.tracks.getTracks());
+
+		numbersClassifier.multipleOfThree(this.tracks.getTracks().get(0));
 	}
 }

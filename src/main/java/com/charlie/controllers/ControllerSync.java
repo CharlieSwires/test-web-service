@@ -29,6 +29,7 @@ public class ControllerSync {
 
 	@RequestMapping(value = "/post", method=RequestMethod.POST)
 	public ResponseEntity<Track> postTest(@RequestBody Track track){
+		System.out.println("post:"+track.toString());
 		return new ResponseEntity<Track>(serv.send(track),HttpStatus.OK);
 		
 	}

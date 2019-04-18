@@ -18,11 +18,10 @@ public class MyService {
 	private BasicIntegrationConfig bic;
 	
 	public Tracks getTracks() {
-		// TODO Auto-generated method stub
-		return null;
+		return bic.getTracks();
 	}
 
-	synchronized public Tracks getTracks3() {
+	public Tracks getTracks3() {
 		Tracks copyTracks = new Tracks();
 		List<Track> tal = new ArrayList<Track>();
 		if (bic.getTracks3().getTracks() != null)
@@ -37,7 +36,7 @@ public class MyService {
 		return copyTracks;
 	}
 
-	synchronized public Tracks getTracks2() {
+	public Tracks getTracks2() {
 		Tracks copyTracks = new Tracks();
 		List<Track> tal = new ArrayList<Track>();
 		if (bic.getTracks2().getTracks() != null)
@@ -52,7 +51,7 @@ public class MyService {
 		return copyTracks;
 	}
 
-	synchronized public Tracks getTracks1() {
+	public Tracks getTracks1() {
 		Tracks copyTracks = new Tracks();
 		List<Track> tal = new ArrayList<Track>();
 		if (bic.getTracks1().getTracks() != null)
