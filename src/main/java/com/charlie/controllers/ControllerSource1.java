@@ -25,15 +25,7 @@ public class ControllerSource1 {
 	//@PreAuthorize("hasRole('IT_DEVELOPER')")
 	@RequestMapping(value = "/get", method=RequestMethod.GET)
 	public ResponseEntity<Tracks> get(){
-		System.out.println("ControllerSource1.get()");
 		Tracks rl = serv1.getTracks1();	
-//		Track fred = new Track();
-//		fred.setDest("1");
-//		fred.setText("Hello");
-//		List<Track> lst = new ArrayList<Track>();
-//		lst.add(fred);
-//		rl = new Tracks();
-//		rl.setTracks(lst);
 		return new ResponseEntity<Tracks>(rl, HttpStatus.OK);
 	}
 }

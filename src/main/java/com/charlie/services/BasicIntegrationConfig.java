@@ -88,7 +88,7 @@ public class BasicIntegrationConfig {
 									}
 									tracks1.getTracks().add(payload);
 									tracks.getTracks().remove(0);
-									System.out.println("payload: "+payload);
+									System.out.println("payload1: "+payload);
 									return payload;
 								}).channel("remainderIsOneChannel"))
 						.subFlowMapping("2", subflow -> subflow
@@ -99,6 +99,7 @@ public class BasicIntegrationConfig {
 									}
 									tracks2.getTracks().add(payload);
 									tracks.getTracks().remove(0);
+									System.out.println("payload2: "+payload);
 									return payload;
 								})
 								.channel("remainderIsTwoChannel"))
@@ -110,6 +111,7 @@ public class BasicIntegrationConfig {
 									}
 									tracks3.getTracks().add(payload);
 									tracks.getTracks().remove(0);
+									System.out.println("payload3: "+payload);
 									return payload;
 								}).channel("remainderIsThreeChannel")));
 	}
@@ -147,7 +149,7 @@ public class BasicIntegrationConfig {
 	}
 
 	public void deleteTracks3(){
-		tracks2.setTracks(new ArrayList<Track>());
+		tracks3.setTracks(new ArrayList<Track>());
 	}
 
 	@Bean
@@ -176,7 +178,6 @@ public class BasicIntegrationConfig {
 			}
 		Tracks result = new Tracks();
 		result.setTracks(tracks);
-		System.out.println("in getTracks() tracks:"+result.toString());
 		return result;
 	}
 
@@ -184,7 +185,6 @@ public class BasicIntegrationConfig {
 		this.tracks = tracks;
 	}	
 	public void setTrack(Track track) {
-		System.out.println("Post track:"+track.toString());
 		if(this.tracks.getTracks() == null) {
 			List<Track> tracks = new ArrayList<Track>();
 			this.tracks.setTracks(tracks);
